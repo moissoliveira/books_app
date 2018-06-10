@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.modal');
+          var instances = M.Modal.init(elems, {});
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('select');
+          var instances = M.FormSelect.init(elems, {});
+      });
+      $( document ).ready(function() {
+          $("#select").on('change', function() {
+              window.location.href = "home?page=1&query=" + $(this)[0].value
+              console.log($(this)[0].value);
+          });
+      });
+
+  </script>
+</head>
+
+<body>
+<nav>
+  <div class="blue nav-wrapper">
+    <a href="/home" class="brand-logo" style="margin-left: 10px"> Books App</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+    </ul>
+
+  </div>
+</nav>
+<div class="container" style="margin-top: 5%">
+  <h3><%= [@author["firstName"], @author["lastName"]].join(' ') %></h3>
+  <a class="waves-effect waves-light btn modal-trigger green right" href="#modal2">Editar</a>
+
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      <h4>Editar:</h4>
+      <div class="row">
+        <form class="col s12" action=<%="/edit_author/#{@params["id"]}"%>>
+          <div class="row">
+            <div class="input-field col s6">
+              <input required="" aria-required="true" id="name" name="name" type="text" class="validate">
+              <label for="surname">First Name</label>
+            </div>
+            <div class="input-field col s6">
+              <input required="" aria-required="true" id="surname" name="surname" type="text" class="validate">
+              <label for="surname">Last Name</label>
+            </div>
+          </div>
+          <input type="submit" class="waves-effect waves-green btn-flat right"/>
+        </form>
+      </div>
+    </div>
+  </div>
+  <h4>Livros:</h4>
+  <table class="striped">
+    <thead>
+    <tr>
+      <th>Livro</th>
+      <th>ISBN</th>
+      <th>Opções</th>
+    </tr>
+    </thead>
+    <tbody>
+  <% @books.each do |book| %>
+        <tr>
+          <td><%= book["title"] %></td>
+          <td><%= book["isbn"] %></td>
+          <td><a class="btn-floating red" href=<%= "/delete_book/#{@author["id"]}/#{book["id"]}" %> ><i class="material-icons">delete</i></a></td>
+        </tr>
+  <% end %>
+    </tbody>
+  </table>
+  <br>
+  <a class="waves-effect waves-light btn modal-trigger blue right" href="#modal1">Novo Livro</a>
+  <a class="waves-effect waves-light btn modal-trigger red right" style="margin-right: 10px" href=<%="/delete_author_books/#{@params["id"]}"%>>Deletar todos</a>
+
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Novo Livro:</h4>
+      <div class="row">
+        <form class="col s12" action=<%="/create_book/#{@params["id"]}"%>>
+          <div class="row">
+            <div class="input-field col s6">
+              <input required="" aria-required="true" id="title" name="title" type="text" class="validate" length="10">
+              <label for="title">Book Name</label>
+            </div>
+            <div class="input-field col s6">
+              <input required="" aria-required="true" id="isbn" name="isbn" type="text" class="validate">
+              <label for="isbn">ISBN</label>
+            </div>
+          </div>
+          <input type="submit" class="waves-effect waves-green btn-flat right"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--JavaScript at end of body for optimized loading-->
+</body>
+</html>
